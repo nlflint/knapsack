@@ -3,25 +3,17 @@
 
 
 ;Define loot primitive
-(define loot list)
-(define loot-name car)
-(define loot-weight cadr)
-(define loot-value caddr)
+(struct loot (name weight value))
 (define (loot-value-density item)
   (/ (loot-value item) (loot-weight item)))
 
-(define gold-ring (loot "gold ring" 1 100))
+(define gold-ring (loot "gold ring" 3 100))
 (check-equal? (loot-name gold-ring) "gold ring")
-(check-equal? (loot-weight gold-ring) 1)
+(check-equal? (loot-weight gold-ring) 3)
 (check-equal? (loot-value gold-ring) 100)
-(check-equal? (loot-value-density gold-ring) 100)
-
-(define lead-ring (loot "lead ring" 10 1))
-(check-equal? (loot-value-density lead-ring) 1/10)
-
+(check-equal? (loot-value-density gold-ring) 100/3)
 
 ;sorting items by value/weight
-
 (define (sort-by-value-per-weight items)
   (sort items (lambda (first second)
                 (>= (loot-value-density first) (loot-value-density second)))))
@@ -31,7 +23,6 @@
                        (loot "bread" 10 20)
                        (loot "gold ring" 1 100)
                        (loot "stone" 20 1)))
-
 (check-equal? (loot-name (first (sort-by-value-per-weight test-treasure-chest))) "gold ring")
 (check-equal? (loot-weight (second (sort-by-value-per-weight test-treasure-chest))) 10)
 (check-equal? (loot-value (last (sort-by-value-per-weight test-treasure-chest))) 2)
